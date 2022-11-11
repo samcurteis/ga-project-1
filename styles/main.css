@@ -39,3 +39,10 @@ body {
   background-size: contain;
   background-position: 2px;
 }
+
+.frisbee {
+  background-image: url("/images/frisbee.jpg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: 2px;
+}

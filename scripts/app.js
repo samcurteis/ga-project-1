@@ -5,10 +5,12 @@ function init() {
   const gridCellCount = width * width;
   const cells = [];
   let bootPosition = 76;
+  let frisbeePositions = [width * 4, width * 4 + 3, width * 4 + 6];
+  // console.log(frisbeePositions);
 
   function createGrid(startingPosition) {
     for (let index = 0; index < gridCellCount; index++) {
-      console.log("it works!");
+      // console.log("it works!");
       const cell = document.createElement("div");
       cell.setAttribute("data-index", index);
       cell.innerHTML = index;
@@ -18,15 +20,70 @@ function init() {
     cells[startingPosition].classList.add("boot");
   }
 
-  function addBoot(position) {
-    cells[position].classList.add("boot");
+  function addObject(position, className) {
+    cells[position].classList.add(className);
   }
 
-  function removeBoot(position) {
-    cells[position].classList.remove("boot");
+  function removeObject(position, className) {
+    cells[position].classList.remove(className);
+  }
+
+  function moveBoot(event) {
+    removeObject(bootPosition, "boot");
+    const x = bootPosition % width;
+    const y = Math.floor(bootPosition / width);
+    console.log(x, y);
+
+    switch (event.keyCode) {
+      case 39:
+        if (x < width - 1) bootPosition++;
+        break;
+      case 37:
+        if (x > 0) bootPosition--;
+        break;
+      case 38:
+        if (y > 0) bootPosition -= width;
+        break;
+      case 40:
+        if (y < width - 1) bootPosition += width;
+        break;
+      default:
+        console.log("invalid key");
+    }
+    addObject(bootPosition, "boot");
+  }
+
+  function moveObstacles(className, positionsToHandle, speed) {
+    setInterval(() => {
+      positionsToHandle.forEach((position) =>
+        removeObject(position, className)
+      );
+      console.log(positionsToHandle);
+      positionsToHandle = positionsToHandle.map((position) => {
+        // ++position);
+        const x = position % width;
+        if (position < x - 1) {
+          ++position;
+        } else if (position === width - 1) {
+          position -= width - 1;
+        }
+      });
+      console.log(positionsToHandle);
+      positionsToHandle.forEach((position) => addObject(position, className));
+    }, speed);
   }
 
   createGrid(bootPosition);
+  moveObstacles("frisbee", frisbeePositions, 1000);
+
+  document.addEventListener("keyup", moveBoot);
 }
 
 window.addEventListener("DOMContentLoaded", init);
+
+// const x = frisbeePosition.map((frisbee) => frisbee % width);
+// if (x.forEach((i) => i < width - 1) {
+//   frisbeePosition++;
+// } else if (x.forEach((i) => i === width - 1) {
+//   frisbeePosition -= width - 1;
+// }
