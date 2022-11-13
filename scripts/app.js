@@ -6,7 +6,7 @@ function init() {
   const cells = [];
   let bootPosition = 76;
   let frisbeePositions = [width * 4, width * 4 + 3, width * 4 + 6];
-  // console.log(frisbeePositions);
+  console.log(frisbeePositions);
 
   function createGrid(startingPosition) {
     for (let index = 0; index < gridCellCount; index++) {
@@ -27,6 +27,30 @@ function init() {
   function removeObject(position, className) {
     cells[position].classList.remove(className);
   }
+
+  function moveObstacles(className, positionsToHandle, speed) {
+    setInterval(() => {
+      positionsToHandle.forEach((position) =>
+        removeObject(position, className)
+      );
+      // console.log(positionsToHandle);
+      positionsToHandle = positionsToHandle.map((position) => {
+        // ++position);
+        const x = position % width;
+        console.log(position, x);
+        if (x < width - 1) {
+          position = position + 1;
+        } else if (x === width - 1) {
+          position -= width - 1;
+        }
+      });
+      // console.log(positionsToHandle);
+      positionsToHandle.forEach((position) => addObject(position, className));
+    }, speed);
+  }
+
+  createGrid(bootPosition);
+  moveObstacles("frisbee", frisbeePositions, 1000);
 
   function moveBoot(event) {
     removeObject(bootPosition, "boot");
@@ -52,30 +76,6 @@ function init() {
     }
     addObject(bootPosition, "boot");
   }
-
-  function moveObstacles(className, positionsToHandle, speed) {
-    setInterval(() => {
-      positionsToHandle.forEach((position) =>
-        removeObject(position, className)
-      );
-      console.log(positionsToHandle);
-      positionsToHandle = positionsToHandle.map((position) => {
-        // ++position);
-        const x = position % width;
-        if (position < x - 1) {
-          ++position;
-        } else if (position === width - 1) {
-          position -= width - 1;
-        }
-      });
-      console.log(positionsToHandle);
-      positionsToHandle.forEach((position) => addObject(position, className));
-    }, speed);
-  }
-
-  createGrid(bootPosition);
-  moveObstacles("frisbee", frisbeePositions, 1000);
-
   document.addEventListener("keyup", moveBoot);
 }
 
