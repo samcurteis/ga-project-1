@@ -3,6 +3,9 @@
 }
 
 body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 100vh;
   margin: 0;
 }
@@ -41,4 +44,14 @@ body {
   background-repeat: no-repeat;
   background-size: contain;
   background-position: 2px;
+  width: 50px;
+  height: 50%;
+}
+
+.endGame {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  display: none;
 }

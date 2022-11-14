@@ -1,12 +1,14 @@
 function init() {
-  let grid = document.querySelector(".grid");
-  console.log(grid);
+  const grid = document.querySelector(".grid");
+  const endGameDiv = document.querySelector(".endGame");
   const width = 15;
   const gridCellCount = width * width;
   const cells = [];
+  const rowFour = width * 4;
   const rowEight = width * 8;
   const obstacles = {
     frisbees: [rowEight, rowEight + 3, rowEight + 7, rowEight + 11],
+    laneOne: [rowFour, rowFour + 1],
   };
   let bootPosition = 217;
 
@@ -83,9 +85,22 @@ function init() {
   }
   document.addEventListener("keyup", moveBoot);
 
+  function replay() {
+    bootPosition = 217;
+    endGameDiv.style.display = "none";
+    grid.style.display = "flex";
+    cells[bootPosition].classList.add("boot");
+  }
+
+  const tryAgainButton = document.querySelector(".try-again");
+  tryAgainButton.addEventListener("click", replay);
+
   function endGame() {
-    grid = false;
-    console.log(grid);
+    // const gridElements = Object.keys(grid);
+    // gridElements.forEach((item) => item.remove());
+    // // console.log("it works!");
+    grid.style.display = "none";
+    endGameDiv.style.display = "flex";
   }
 
   function checkCollision(className) {
