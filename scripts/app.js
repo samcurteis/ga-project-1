@@ -4,11 +4,33 @@ function init() {
   const width = 15;
   const gridCellCount = width * width;
   const cells = [];
-  const rowFour = width * 4;
-  const rowEight = width * 8;
+  const laneOneRow = width * 4;
+  const laneTwoRow = width * 3;
+  const frisbeeRow = width * 8;
   const obstacles = {
-    frisbees: [rowEight, rowEight + 3, rowEight + 7, rowEight + 11],
-    laneOne: [rowFour, rowFour + 1],
+    frisbees: [frisbeeRow, frisbeeRow + 3, frisbeeRow + 7, frisbeeRow + 11],
+    laneOne: [
+      laneOneRow,
+      laneOneRow + 1,
+      laneOneRow + 2,
+      laneOneRow + 6,
+      laneOneRow + 7,
+      laneOneRow + 8,
+      laneOneRow + 11,
+      laneOneRow + 12,
+      laneOneRow + 13,
+    ],
+    laneTwo: [
+      laneTwoRow,
+      laneTwoRow + 1,
+      laneTwoRow + 2,
+      laneTwoRow + 6,
+      laneTwoRow + 7,
+      laneTwoRow + 8,
+      laneTwoRow + 11,
+      laneTwoRow + 12,
+      laneTwoRow + 13,
+    ],
   };
   let bootPosition = 217;
 
@@ -25,33 +47,38 @@ function init() {
 
   createGrid(bootPosition);
 
-  function addObject(row, className) {
-    row.forEach((index) => {
+  function addObject(obstacle, className) {
+    obstacle.forEach((index) => {
       cells[index].classList.add(className);
     });
   }
 
-  function removeObject(row, className) {
-    row.forEach((index) => {
+  function removeObject(obstacle, className) {
+    obstacle.forEach((index) => {
       cells[index].classList.remove(className);
     });
   }
 
-  function moveObstacles(row, className, speed) {
+  function moveObstacles(direction, row, obstacle, className, speed) {
     setInterval(() => {
-      removeObject(row, className);
-      // row = row.map((index) => {
-      //   if (index > rowEight + width - 2) {
-      //     return (index -= width + -1);
-      //   } else {
-      //     return (index += 1);
-      //   }
-      // });
-      addObject(row, className);
+      removeObject(obstacle, className);
+      obstacle = obstacle.map((index) => {
+        if (index > row + width - 2 && direction === +1) {
+          return (index -= width - 1);
+        } else if (index < row + 1 && direction === -1) {
+          return (index += width - 1);
+        } else {
+          return (index += direction);
+        }
+      });
+      addObject(obstacle, className);
+      checkCollision();
     }, speed);
   }
 
-  moveObstacles(obstacles.frisbees, "frisbee", 800);
+  moveObstacles(+1, frisbeeRow, obstacles.frisbees, "frisbee", 800);
+  moveObstacles(-1, laneOneRow, obstacles.laneOne, "lane-one", 1000);
+  moveObstacles(+1, laneTwoRow, obstacles.laneTwo, "lane-two", 1000);
 
   // function runGameOver() {
   //   grid.removeAttribute("div");
@@ -80,12 +107,13 @@ function init() {
       default:
         console.log("invalid key");
     }
-    checkCollision("frisbee");
+    checkCollision();
     cells[bootPosition].classList.add("boot");
   }
   document.addEventListener("keyup", moveBoot);
 
   function replay() {
+    cells[bootPosition].classList.remove("boot");
     bootPosition = 217;
     endGameDiv.style.display = "none";
     grid.style.display = "flex";
@@ -103,11 +131,14 @@ function init() {
     endGameDiv.style.display = "flex";
   }
 
-  function checkCollision(className) {
-    if (cells[bootPosition].classList.contains(className)) {
-      endGame();
-      console.log("it works!");
-    }
+  function checkCollision() {
+    const obstacleClassNames = ["frisbee", "lane-one", "lane-two"];
+    obstacleClassNames.forEach((obstacle) => {
+      if (cells[bootPosition].classList.contains(obstacle)) {
+        endGame();
+        console.log("it works!");
+      }
+    });
   }
 }
 window.addEventListener("DOMContentLoaded", init);

@@ -44,8 +44,14 @@ body {
   background-repeat: no-repeat;
   background-size: contain;
   background-position: 2px;
-  width: 50px;
-  height: 50%;
+}
+
+.lane-one {
+  background-color: blue;
+}
+
+.lane-two {
+  background-color: red;
 }
 
 .endGame {
