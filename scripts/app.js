@@ -1,11 +1,13 @@
 function init() {
-  const grid = document.querySelector(".grid");
-
+  let grid = document.querySelector(".grid");
+  console.log(grid);
   const width = 15;
   const gridCellCount = width * width;
   const cells = [];
   const rowEight = width * 8;
-
+  const obstacles = {
+    frisbees: [rowEight, rowEight + 3, rowEight + 7, rowEight + 11],
+  };
   let bootPosition = 217;
 
   function createGrid(startingPosition) {
@@ -36,13 +38,13 @@ function init() {
   function moveObstacles(row, className, speed) {
     setInterval(() => {
       removeObject(row, className);
-      row = row.map((index) => {
-        if (index > rowEight + width - 2) {
-          return (index -= width + -1);
-        } else {
-          return (index += 1);
-        }
-      });
+      // row = row.map((index) => {
+      //   if (index > rowEight + width - 2) {
+      //     return (index -= width + -1);
+      //   } else {
+      //     return (index += 1);
+      //   }
+      // });
       addObject(row, className);
     }, speed);
   }
@@ -53,26 +55,6 @@ function init() {
   //   grid.removeAttribute("div");
   //   // console.log("it works!");
   // }
-  const obstacles = {
-    frisbees: [rowEight, rowEight + 3, rowEight + 7, rowEight + 11],
-  };
-
-  function handleCollision(obstacle) {
-    if (bootPosition.classList.contains(obstacle)) {
-      console.log("it works!");
-    }
-  }
-
-  //   function obstacles (array) => {
-  //     console.log(array);
-  //     array.forEach((obstacle) => {
-  //       if (obstacle.classList.contains("boot")) {
-  //         console.log("it works!");
-  //         runGameOver();
-  //       }
-  //     })};);
-
-  handleCollision("frisbee");
 
   function moveBoot(event) {
     cells[bootPosition].classList.remove("boot");
@@ -96,9 +78,21 @@ function init() {
       default:
         console.log("invalid key");
     }
+    checkCollision("frisbee");
     cells[bootPosition].classList.add("boot");
   }
   document.addEventListener("keyup", moveBoot);
-}
 
+  function endGame() {
+    grid = false;
+    console.log(grid);
+  }
+
+  function checkCollision(className) {
+    if (cells[bootPosition].classList.contains(className)) {
+      endGame();
+      console.log("it works!");
+    }
+  }
+}
 window.addEventListener("DOMContentLoaded", init);
