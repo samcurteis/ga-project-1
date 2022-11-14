@@ -15,13 +15,11 @@ body {
 
 .grid {
   align-items: center;
-
   display: flex;
   flex-wrap: wrap;
   height: 90%;
   justify-content: center;
   width: 1000px;
-  /* background-image: url("/images/old_boots.png"); */
 }
 
 .grid div {
@@ -29,18 +27,17 @@ body {
   flex-grow: 1;
   height: 8%;
   width: 6.5%;
-  /* background-image: url("/images/old_boots.png"); */
 }
 
 .boot {
-  background-image: url("/images/old_boots.png");
+  background-image: url("./images/old_boots.png");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: 2px;
 }
 
 .frisbee {
-  background-image: url("/images/frisbee.jpg");
+  background-image: url("./images/frisbee.jpg");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: 2px;
