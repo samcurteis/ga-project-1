@@ -30,14 +30,14 @@ body {
 }
 
 .boot {
-  background-image: url("./images/old_boots.png");
+  background-image: url("../images/old_boots.png");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: 2px;
 }
 
 .frisbee {
-  background-image: url("./images/frisbee.jpg");
+  background-image: url("../images/frisbee.jpg");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: 2px;
