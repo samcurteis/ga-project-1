@@ -1,71 +1,25 @@
 function init() {
   const grid = document.querySelector(".grid");
 
-  const width = 9;
+  const width = 15;
   const gridCellCount = width * width;
   const cells = [];
-  const rowFour = [27, 30, 33];
-  // const rowFour = [];
+  const rowEight = width * 8;
 
-  let bootPosition = 76;
+  let bootPosition = 217;
 
-  // function createGrid(startingPosition) {
-  //   for (let index = 0; index < gridCellCount; index++) {
-  //     // console.log("it works!");
-  //     const cell = document.createElement("div");
-  //     if (index < width * 4 && index > width * 3 - 1) {
-  //       cell.dataset.row = 4;
-  //       cell.dataset.index = index;
-  //       rowFour.push(cell);
-  //     } else {
-  //       cell.dataset.index = index;
-  //     }
-  //     cell.innerHTML = index;
-  //     cells.push(cell);
-  //     grid.appendChild(cell);
-  //   }
-  //   cells[startingPosition].classList.add("boot");
-  // }
-
-  function createGrid() {
+  function createGrid(startingPosition) {
     for (let i = 0; i < gridCellCount; i++) {
       const cell = document.createElement("div");
       cell.setAttribute("data-index", i);
+      cell.innerHTML = i;
       cells.push(cell);
       grid.appendChild(cell);
     }
+    cells[startingPosition].classList.add("boot");
   }
 
-  console.log(cells, rowFour);
-
-  // function addObject(index, className) {
-  //   index.classList.add(className);
-  // }
-
-  // function removeObject(index, className) {
-  //   index.classList.remove(className);
-  // }
-
-  // function moveObstacles(row, className, speed) {
-  //   setInterval(
-  //     () => {
-  //       rowFour.forEach((index) => removeObject(index, "frisbee"))
-  //       for (let index = 0; index < row.length; index = index + 3) {
-  //         row[index - 1].classList.remove(className);
-  //         const element = row[index];
-  //         // const newObject = document.createElement("div");
-  //         element.classList.add(className);
-
-  //         const newDiv = document.createElement("div");
-  //         row.push(newDiv);
-  //       }
-  //       rowFour.forEach((index) => addObject(index, "frisbee"));
-  //     },
-
-  //     speed
-  //   );
-  // }
-  // moveObstacles(rowFour, "frisbee", 1000);
+  createGrid(bootPosition);
 
   function addObject(row, className) {
     row.forEach((index) => {
@@ -83,7 +37,7 @@ function init() {
     setInterval(() => {
       removeObject(row, className);
       row = row.map((index) => {
-        if (index > width * 4 - 2) {
+        if (index > rowEight + width - 2) {
           return (index -= width + -1);
         } else {
           return (index += 1);
@@ -93,14 +47,38 @@ function init() {
     }, speed);
   }
 
-  createGrid(bootPosition);
-  moveObstacles(rowFour, "frisbee", 1000);
+  moveObstacles(obstacles.frisbees, "frisbee", 800);
+
+  // function runGameOver() {
+  //   grid.removeAttribute("div");
+  //   // console.log("it works!");
+  // }
+  const obstacles = {
+    frisbees: [rowEight, rowEight + 3, rowEight + 7, rowEight + 11],
+  };
+
+  function handleCollision(obstacle) {
+    if (bootPosition.classList.contains(obstacle)) {
+      console.log("it works!");
+    }
+  }
+
+  //   function obstacles (array) => {
+  //     console.log(array);
+  //     array.forEach((obstacle) => {
+  //       if (obstacle.classList.contains("boot")) {
+  //         console.log("it works!");
+  //         runGameOver();
+  //       }
+  //     })};);
+
+  handleCollision("frisbee");
 
   function moveBoot(event) {
-    removeObject(bootPosition, "boot");
+    cells[bootPosition].classList.remove("boot");
     const x = bootPosition % width;
     const y = Math.floor(bootPosition / width);
-    console.log(x, y);
+    // console.log(x, y);
 
     switch (event.keyCode) {
       case 39:
@@ -118,7 +96,7 @@ function init() {
       default:
         console.log("invalid key");
     }
-    addObject(bootPosition, "boot");
+    cells[bootPosition].classList.add("boot");
   }
   document.addEventListener("keyup", moveBoot);
 }
