@@ -8,6 +8,7 @@ body {
   align-items: center;
   height: 100vh;
   margin: 0;
+  background-color: rgb(13, 150, 13);
 }
 
 .grid-wrapper {
@@ -28,8 +29,8 @@ body {
 .grid div {
   border: 1px solid lightgrey;
   flex-grow: 1;
-  height: 8%;
-  width: 6.5%;
+  height: 9%;
+  width: 9%;
 }
 
 .boot {
@@ -40,24 +41,38 @@ body {
 }
 
 .frisbee {
-  background-image: url("../images/frisbee.jpg");
+  background-image: url("../images/frisbee.png");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: 2px;
 }
 
+.game-over {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-won {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.road {
+  background-image: url("../images/road.jpeg");
+  background-repeat: repeat;
+  background-size: contain;
+}
+
 .lane-one {
-  background-color: blue;
+  background-image: url("../images/yellow-car-road.jpeg");
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
 .lane-two {
   background-color: red;
-}
-
-.endGame {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  display: none;
 }
