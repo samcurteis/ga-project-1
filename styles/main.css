@@ -19,32 +19,24 @@ body {
 
 .grid {
   align-items: center;
-  display: flex;
+  display: none;
   flex-wrap: wrap;
   height: 90%;
   justify-content: center;
-  width: 1000px;
+  width: 1300px;
 }
 
 .grid div {
-  border: 1px solid lightgrey;
   flex-grow: 1;
-  height: 9%;
-  width: 9%;
+  height: 82px;
+  width: 118px;
 }
 
-.boot {
-  background-image: url("../images/old_boots.png");
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: 2px;
-}
-
-.frisbee {
-  background-image: url("../images/frisbee.png");
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: 2px;
+.start-game {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .game-over {
@@ -64,15 +56,48 @@ body {
 .road {
   background-image: url("../images/road.jpeg");
   background-repeat: repeat;
+  background-size: cover;
+}
+
+.boot {
+  background-image: url("../images/old_boots.png");
+  background-repeat: no-repeat;
   background-size: contain;
+
+  width: 10px;
+}
+
+.road-boot {
+  background-image: url("../images/road-boot.jpeg");
+  background-size: cover;
 }
 
 .lane-one {
   background-image: url("../images/yellow-car-road.jpeg");
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
 }
 
 .lane-two {
-  background-color: red;
+  background-image: url("../images/red-car-road.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.frisbee {
+  background-image: url("../images/frisbee.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: 2px;
+}
+
+.green-patch {
+  background-color: brown;
+}
+
+.level {
+  display: none;
+  /* align-self: flex-start; */
+  align-self: flex-end;
+  padding: 100px;
 }

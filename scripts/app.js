@@ -1,44 +1,26 @@
 function init() {
   const grid = document.querySelector(".grid");
+  const startGameDiv = document.querySelector(".start-game");
   const endGameDiv = document.querySelector(".game-over");
   const gameWonDiv = document.querySelector(".game-won");
+  const playAgainButton = document.querySelectorAll(".play-again");
+  const startGameButton = document.querySelector(".play");
+  const levelDisplay = document.querySelector(".level");
+  let level = 0;
+
   const width = 11;
   const gridCellCount = width * width;
   const cells = [];
-  let laneOneRow = width * 5;
-  const laneTwoRow = width * 3;
-  const frisbeeRow = width * 8;
+  let laneOneRow = width * 2;
+  const laneTwoRow = width;
+  const frisbeeRow = width * 7;
+  const bogRowOne = width * 9;
   const obstacles = {
-    frisbees: [frisbeeRow, frisbeeRow + 3, frisbeeRow + 7, frisbeeRow + 10],
-    laneOne: [
-      laneOneRow,
-      laneOneRow + 1,
-      laneOneRow + 2,
-      laneOneRow + 6,
-      laneOneRow + 7,
-      laneOneRow + 8,
-    ],
-    laneTwo: [
-      laneTwoRow,
-      laneTwoRow + 1,
-      laneTwoRow + 2,
-      laneTwoRow + 6,
-      laneTwoRow + 7,
-      laneTwoRow + 8,
-    ],
+    frisbees: [0, 3, 7, 9],
+    laneOne: [0, 1, 2, 6, 7, 8],
+    laneTwo: [0, 1, 2, 6, 7, 8],
+    greenOne: [1, 2, 3, 8, 9, 10],
   };
-
-  function roadDesign() {
-    for (let i = 0; i < gridCellCount; i++) {
-      if (
-        (i >= laneOneRow && i <= laneOneRow + width - 1) ||
-        (i >= laneTwoRow && i <= laneTwoRow + width - 1)
-      ) {
-        console.log("it works!");
-        cells[i].classList.add("road");
-      }
-    }
-  }
 
   let bootPosition = Math.floor(width * width - width / 2);
 
@@ -53,24 +35,57 @@ function init() {
     cells[startingPosition].classList.add("boot");
   }
 
-  createGrid(bootPosition);
-
-  function addObject(obstacle, className) {
-    obstacle.forEach((index) => {
-      cells[index].classList.add(className);
-    });
+  function startGame() {
+    startGameDiv.style.display = "none";
+    grid.style.display = "flex";
+    levelDisplay.style.display = "flex";
+    createGrid(bootPosition);
+    levelZero();
   }
 
-  function removeObject(obstacle, className) {
-    obstacle.forEach((index) => {
-      cells[index].classList.remove(className);
-    });
+  startGameButton.addEventListener("click", startGame);
+
+  function levelZero() {
+    // console.log("level zero activated, laneOneRow is " + laneOneRow);
+    // moveObstacles(+1, frisbeeRow, obstacles.frisbees, "frisbee", 800);
+    // moveObstacles(-1, laneOneRow, obstacles.laneOne, "lane-one", 1000);
+    // moveObstacles(+1, laneTwoRow, obstacles.laneTwo, "lane-two", 1000);
+    moveObstacles(+1, bogRowOne, obstacles.greenOne, "green-patch", 100);
   }
+
+  function levelOne() {
+    laneOneRow = width * 4;
+    console.log("level one activated, laneOneRow is " + laneOneRow);
+    // console.log("lane one in level one:" + laneOneRow);
+    // moveObstacles(+1, frisbeeRow, obstacles.frisbees, "frisbee", 700);
+    moveObstacles(-1, laneOneRow, obstacles.laneOne, "lane-one", 1000);
+    // moveObstacles(+1, laneTwoRow, obstacles.laneTwo, "lane-two", 400);
+  }
+
+  function replay() {
+    cells[bootPosition].classList.remove("boot");
+    bootPosition = Math.floor(width * width - width / 2);
+    cells[bootPosition].classList.add("boot");
+    gameWonDiv.style.display = "none";
+    endGameDiv.style.display = "none";
+    grid.style.display = "flex";
+    levelDisplay.style.display = "flex";
+
+    if (level !== 0) {
+      clearInterval(moveObstacles);
+      levelOne();
+    }
+  }
+
+  playAgainButton.forEach((button) => button.addEventListener("click", replay));
 
   function moveObstacles(direction, row, obstacle, className, speed) {
-    setInterval(() => {
-      removeObject(obstacle, className);
-      obstacle = obstacle.map((index) => {
+    let newObstacleArray = obstacle.map((index) => (index += row));
+
+    const obstacleInterval = setInterval(() => {
+      // console.log(newObstacleArray);
+      removeObject(newObstacleArray, className, row);
+      newObstacleArray = newObstacleArray.map((index) => {
         if (index > row + width - 2 && direction === +1) {
           return (index -= width - 1);
         } else if (index < row + 1 && direction === -1) {
@@ -79,21 +94,31 @@ function init() {
           return (index += direction);
         }
       });
-      addObject(obstacle, className);
+      // console.log(newObstacleArray);
+      addObject(newObstacleArray, className, row);
       checkCollision();
     }, speed);
+    if (level !== 0) {
+      // removeObject(obstacle, className);
+      clearInterval(obstacleInterval);
+    }
     roadDesign();
   }
 
-  function levelOne() {
-    moveObstacles(+1, frisbeeRow, obstacles.frisbees, "frisbee", 800);
-    moveObstacles(-1, laneOneRow, obstacles.laneOne, "lane-one", 1000);
-    moveObstacles(+1, laneTwoRow, obstacles.laneTwo, "lane-two", 1000);
+  function addObject(obstacle, className, row) {
+    obstacle.forEach((index) => {
+      cells[index].classList.add(className);
+    });
   }
 
-  levelOne();
+  function removeObject(obstacle, className, row) {
+    obstacle.forEach((index) => {
+      cells[index].classList.remove(className);
+    });
+  }
 
   function moveBoot(event) {
+    cells[bootPosition].classList.remove("road-boot");
     cells[bootPosition].classList.remove("boot");
     const x = bootPosition % width;
     const y = Math.floor(bootPosition / width);
@@ -117,6 +142,7 @@ function init() {
     }
     checkCollision();
     checkGameWon();
+    bootRoadDesign();
     cells[bootPosition].classList.add("boot");
   }
   document.addEventListener("keyup", moveBoot);
@@ -125,35 +151,47 @@ function init() {
     const obstacleClassNames = ["frisbee", "lane-one", "lane-two"];
     obstacleClassNames.forEach((obstacle) => {
       if (cells[bootPosition].classList.contains(obstacle)) {
-        endGame();
-        // console.log("it works!");
+        // endGame();
+        console.log("check collision activated");
       }
     });
   }
 
-  function checkGameWon() {
-    if (bootPosition < width - 1) {
-      console.log("it works!");
-      grid.style.display = "none";
-      gameWonDiv.style.display = "flex";
-    }
-  }
-
   function endGame() {
+    console.log("end game activated");
     grid.style.display = "none";
     endGameDiv.style.display = "flex";
   }
 
-  function replay() {
-    cells[bootPosition].classList.remove("boot");
-    bootPosition = Math.floor(width * width - width / 2);
-    gameWonDiv.style.display = "none";
-    endGameDiv.style.display = "none";
-    grid.style.display = "flex";
-    cells[bootPosition].classList.add("boot");
+  function roadDesign() {
+    for (let i = 0; i < gridCellCount; i++) {
+      if (
+        (i >= laneOneRow && i <= laneOneRow + width - 1) ||
+        (i >= laneTwoRow && i <= laneTwoRow + width - 1)
+      ) {
+        // console.log("it works!");
+        cells[i].classList.add("road");
+      } else {
+        cells[i].classList.remove("road");
+      }
+    }
   }
 
-  const playAgainButton = document.querySelectorAll(".play-again");
-  playAgainButton.forEach((button) => button.addEventListener("click", replay));
+  function bootRoadDesign() {
+    if (cells[bootPosition].classList.contains("road")) {
+      cells[bootPosition].classList.add("road-boot");
+    }
+  }
+
+  function checkGameWon() {
+    if (bootPosition < width - 1) {
+      // console.log("it works!");
+      grid.style.display = "none";
+      gameWonDiv.style.display = "flex";
+      levelDisplay.style.display = "none";
+      level += 1;
+      levelDisplay.innerHTML = `Level: ${level}`;
+    }
+  }
 }
 window.addEventListener("DOMContentLoaded", init);
