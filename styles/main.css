@@ -53,6 +53,13 @@ body {
   align-items: center;
 }
 
+.game-beat {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .road {
   background-image: url("../images/road.jpeg");
   background-repeat: repeat;

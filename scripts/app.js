@@ -1,189 +1,49 @@
-import moveObstacles from "./obstacles.js";
-
 function init() {
-  moveObstacles();
-
-  let laneOneInterval;
-  let laneTwoInterval;
-  let frisbeesOneInterval;
-  let patchesOneInterval;
-  let patchesTwoInterval;
-
-  function addObject(obstacle, className, row) {
-    obstacle.forEach((index) => {
-      cells[index].classList.add(className);
-    });
-  }
-
-  function removeObject(obstacle, className, row) {
-    obstacle.forEach((index) => {
-      cells[index].classList.remove(className);
-    });
-  }
-
-  function moveLaneOne(direction, row, obstacle, className, speed) {
-    let newObstacleArray = obstacle.map((index) => (index += row));
-
-    laneOneInterval = setInterval(() => {
-      // console.log(newObstacleArray);
-      removeObject(newObstacleArray, className, row);
-      newObstacleArray = newObstacleArray.map((index) => {
-        if (index > row + width - 2 && direction === +1) {
-          return (index -= width - 1);
-        } else if (index < row + 1 && direction === -1) {
-          return (index += width - 1);
-        } else {
-          return (index += direction);
-        }
-      });
-      // console.log(newObstacleArray);
-      addObject(newObstacleArray, className, row);
-      checkCollision();
-    }, speed);
-    roadDesign();
-  }
-
-  function moveLaneTwo(direction, row, obstacle, className, speed) {
-    let newObstacleArray = obstacle.map((index) => (index += row));
-
-    laneTwoInterval = setInterval(() => {
-      // console.log(newObstacleArray);
-      removeObject(newObstacleArray, className, row);
-      newObstacleArray = newObstacleArray.map((index) => {
-        if (index > row + width - 2 && direction === +1) {
-          return (index -= width - 1);
-        } else if (index < row + 1 && direction === -1) {
-          return (index += width - 1);
-        } else {
-          return (index += direction);
-        }
-      });
-      // console.log(newObstacleArray);
-      addObject(newObstacleArray, className, row);
-      checkCollision();
-    }, speed);
-    roadDesign();
-  }
-
-  function moveFrisbeesOne(direction, row, obstacle, className, speed) {
-    let newObstacleArray = obstacle.map((index) => (index += row));
-
-    frisbeesOneInterval = setInterval(() => {
-      // console.log(newObstacleArray);
-      addBoot(direction);
-      removeObject(newObstacleArray, className, row);
-      newObstacleArray = newObstacleArray.map((index) => {
-        if (index > row + width - 2 && direction === +1) {
-          return (index -= width - 1);
-        } else if (index < row + 1 && direction === -1) {
-          return (index += width - 1);
-        } else {
-          return (index += direction);
-        }
-      });
-      // console.log(newObstacleArray);
-      addObject(newObstacleArray, className, row);
-      checkCollision();
-    }, speed);
-    roadDesign();
-  }
-
-  function movePatchesOne(direction, row, obstacle, className, speed) {
-    let newObstacleArray = obstacle.map((index) => (index += row));
-
-    patchesOneInterval = setInterval(() => {
-      // console.log(newObstacleArray);
-      removeBoot();
-      removeObject(newObstacleArray, className, row);
-      newObstacleArray = newObstacleArray.map((index) => {
-        if (index > row + width - 2 && direction === +1) {
-          return (index -= width - 1);
-        } else if (index < row + 1 && direction === -1) {
-          return (index += width - 1);
-        } else {
-          return (index += direction);
-        }
-      });
-      // console.log(newObstacleArray);
-      addBoot(direction);
-      addObject(newObstacleArray, className, row);
-
-      checkCollision();
-    }, speed);
-    roadDesign();
-  }
-
-  function movePatchesTwo(direction, row, obstacle, className, speed) {
-    let newObstacleArray = obstacle.map((index) => (index += row));
-
-    patchesTwoInterval = setInterval(() => {
-      // console.log(newObstacleArray);
-      // removeBoot(newObstacleArray);
-      removeBoot();
-      removeObject(newObstacleArray, className, row);
-      // newObstacleArray = newObstacleArray.map((index) => {
-      //   if (index > row + width - 2 && direction === +1) {
-      //     return (index -= width - 1);
-      //   } else if (index < row + 1 && direction === -1) {
-      //     return (index += width - 1);
-      //   } else {
-      //     return (index += direction);
-      //   }
-      // });
-      // console.log(newObstacleArray);
-      addObject(newObstacleArray, className, row);
-      addBoot(direction);
-      checkCollision();
-    }, speed);
-    roadDesign();
-  }
-
-  function addBoot(direction) {
-    if (cells[bootPosition].classList.contains("green-patch")) {
-      bootPosition += direction;
-      cells[bootPosition].classList.add("boot");
-    }
-  }
-
-  function removeBoot() {
-    if (cells[bootPosition].classList.contains("green-patch"))
-      cells[bootPosition].classList.remove("boot");
-  }
-
-  // function removeBoot(obstacle) {
-  //   obstacle.forEach((index) => {
-  //     if (cells[index].classList.contains("boot")) {
-  //       cells[index].classList.remove("boot");
-  //     }
-  //   });
-  // }
-
   const grid = document.querySelector(".grid");
   const startGameDiv = document.querySelector(".start-game");
   const endGameDiv = document.querySelector(".game-over");
   const gameWonDiv = document.querySelector(".game-won");
+  const gameBeatDiv = document.querySelector(".game-beat");
   const playAgainButton = document.querySelectorAll(".play-again");
   const startGameButton = document.querySelector(".play");
   const levelDisplay = document.querySelector(".level");
-  let level = 0;
 
+  let level = 0;
   const width = 11;
   const gridCellCount = width * width;
   const cells = [];
-  let laneOneRow = width * 3;
-  const laneTwoRow = width;
-  const frisbeeRow = width * 5;
-  const bogRowOne = width * 8;
-  const bogRowTwo = width * 7;
+  let laneOneRow;
+  let laneTwoRow;
+  let laneThreeRow;
+  let laneFourRow = width * 4;
+  let frisbeeRowOne = width * 5;
+  let frisbeeRowTwo = width * 6;
+  let frisbeeRowThree = width * 7;
+  const bogRowOne = width * 7;
+  const bogRowTwo = width * 8;
+  // const bogRowThree = width * 9;
   const obstacles = {
-    frisbees: [0, 3, 7, 9],
     laneOne: [0, 1, 2, 6, 7, 8],
-    laneTwo: [0, 1, 2, 6, 7, 8],
+    laneTwo: [0, 2, 5, 7, 8, 10],
+    laneThree: [1, 2, 4, 6, 7, 9, 10],
+    frisbeesOne: [0, 3, 7, 9],
+    frisbeesTwo: [1, 3, 7, 10],
+    frisbeesThree: [2, 3, 6, 7, 9],
     greenOne: [1, 2, 3, 8, 9, 10],
     greenTwo: [1, 2, 3, 8, 9, 10],
+    greenThree: [2, 3, 6, 7, 10],
   };
-
   let bootPosition = Math.floor(width * width - width / 2);
+
+  let laneOneInterval;
+  let laneTwoInterval;
+  let laneThreeInterval;
+  let frisbeesOneInterval;
+  let frisbeesTwoInterval;
+  let frisbeesThreeInterval;
+  let patchesOneInterval;
+  let patchesTwoInterval;
+  let patchesThreeInterval;
 
   function createGrid(startingPosition) {
     for (let i = 0; i < gridCellCount; i++) {
@@ -196,6 +56,224 @@ function init() {
     cells[startingPosition].classList.add("boot");
   }
 
+  function addObject(obstacle, className) {
+    obstacle.forEach((index) => {
+      cells[index].classList.add(className);
+    });
+  }
+
+  function removeObject(obstacle, className) {
+    obstacle.forEach((index) => {
+      cells[index].classList.remove(className);
+    });
+  }
+
+  function addBoot(direction, row) {
+    // console.log(row);
+    if (cells[bootPosition].classList.contains("green-patch")) {
+      bootPosition = bootPosition - direction;
+      console.log(bootPosition);
+      console.log("row value in addBoot is", row);
+      cells[bootPosition].classList.add("boot");
+      // if (bootPosition > row + width && direction === +1) {
+      //   endGame();
+      // } else if (bootPosition < row + 1 && direction === -1) {
+      //   endGame();
+      // }
+    }
+  }
+
+  function removeBoot() {
+    if (cells[bootPosition].classList.contains("green-patch"))
+      cells[bootPosition].classList.remove("boot");
+  }
+
+  // ***** LANES ******
+
+  function moveLaneOne(direction, row, obstacle, className, speed) {
+    let newObstacleArray = obstacle.map((index) => (index += row));
+
+    laneOneInterval = setInterval(() => {
+      removeObject(newObstacleArray, className, row);
+      newObstacleArray = newObstacleArray.map((index) => {
+        if (index > row + width - 2 && direction === +1) {
+          return (index -= width - 1);
+        } else if (index < row + 1 && direction === -1) {
+          return (index += width - 1);
+        } else {
+          return (index += direction);
+        }
+      });
+      addObject(newObstacleArray, className, row);
+      checkCollision();
+    }, speed);
+    roadDesign();
+  }
+
+  function moveLaneTwo(direction, row, obstacle, className, speed) {
+    let newObstacleArray = obstacle.map((index) => (index += row));
+
+    laneTwoInterval = setInterval(() => {
+      removeObject(newObstacleArray, className, row);
+      newObstacleArray = newObstacleArray.map((index) => {
+        if (index > row + width - 2 && direction === +1) {
+          return (index -= width - 1);
+        } else if (index < row + 1 && direction === -1) {
+          return (index += width - 1);
+        } else {
+          return (index += direction);
+        }
+      });
+      addObject(newObstacleArray, className, row);
+      checkCollision();
+    }, speed);
+    roadDesign();
+  }
+
+  function moveLaneThree(direction, row, obstacle, className, speed) {
+    let newObstacleArray = obstacle.map((index) => (index += row));
+
+    laneThreeInterval = setInterval(() => {
+      removeObject(newObstacleArray, className, row);
+      newObstacleArray = newObstacleArray.map((index) => {
+        if (index > row + width - 2 && direction === +1) {
+          return (index -= width - 1);
+        } else if (index < row + 1 && direction === -1) {
+          return (index += width - 1);
+        } else {
+          return (index += direction);
+        }
+      });
+      addObject(newObstacleArray, className, row);
+      checkCollision();
+    }, speed);
+    roadDesign();
+  }
+
+  // ***** FRISBEES ******
+
+  function moveFrisbeesOne(direction, row, obstacle, className, speed) {
+    let newObstacleArray = obstacle.map((index) => (index += row));
+
+    frisbeesOneInterval = setInterval(() => {
+      removeObject(newObstacleArray, className, row);
+      newObstacleArray = newObstacleArray.map((index) => {
+        if (index > row + width - 2 && direction === +1) {
+          return (index -= width - 1);
+        } else if (index < row + 1 && direction === -1) {
+          return (index += width - 1);
+        } else {
+          return (index += direction);
+        }
+      });
+      addObject(newObstacleArray, className, row);
+      checkCollision();
+    }, speed);
+    roadDesign();
+  }
+
+  function moveFrisbeesTwo(direction, row, obstacle, className, speed) {
+    let newObstacleArray = obstacle.map((index) => (index += row));
+
+    frisbeesTwoInterval = setInterval(() => {
+      removeObject(newObstacleArray, className, row);
+      newObstacleArray = newObstacleArray.map((index) => {
+        if (index > row + width - 2 && direction === +1) {
+          return (index -= width - 1);
+        } else if (index < row + 1 && direction === -1) {
+          return (index += width - 1);
+        } else {
+          return (index += direction);
+        }
+      });
+      addObject(newObstacleArray, className, row);
+      checkCollision();
+    }, speed);
+    roadDesign();
+  }
+
+  function moveFrisbeesThree(direction, row, obstacle, className, speed) {
+    let newObstacleArray = obstacle.map((index) => (index += row));
+
+    frisbeesThreeInterval = setInterval(() => {
+      removeObject(newObstacleArray, className, row);
+      newObstacleArray = newObstacleArray.map((index) => {
+        if (index > row + width - 2 && direction === +1) {
+          return (index -= width - 1);
+        } else if (index < row + 1 && direction === -1) {
+          return (index += width - 1);
+        } else {
+          return (index += direction);
+        }
+      });
+      addObject(newObstacleArray, className, row);
+      checkCollision();
+    }, speed);
+    roadDesign();
+  }
+
+  // ***** PATCHES ******
+
+  function movePatchesOne(direction, row, obstacle, className, speed) {
+    let newObstacleArray = obstacle.map((index) => (index += row));
+    console.log(row);
+    patchesOneInterval = setInterval(() => {
+      removeObject(newObstacleArray, className, row);
+      newObstacleArray = newObstacleArray.map((index) => {
+        if (index > row + width - 2 && direction === +1) {
+          return (index -= width - 1);
+        } else if (index < row + 1 && direction === -1) {
+          return (index += width - 1);
+        } else {
+          return (index += direction);
+        }
+      });
+      removeBoot();
+      addBoot(direction, row);
+      addObject(newObstacleArray, className, row);
+    }, speed);
+  }
+
+  function movePatchesTwo(direction, row, obstacle, className, speed) {
+    let newObstacleArray = obstacle.map((index) => (index += row));
+
+    patchesTwoInterval = setInterval(() => {
+      removeObject(newObstacleArray, className, row);
+      newObstacleArray = newObstacleArray.map((index) => {
+        if (index > row + width - 2 && direction === +1) {
+          return (index -= width - 1);
+        } else if (index < row + 1 && direction === -1) {
+          return (index += width - 1);
+        } else {
+          return (index += direction);
+        }
+      });
+      removeBoot();
+      addBoot(direction, row);
+      addObject(newObstacleArray, className, row);
+    }, speed);
+  }
+
+  // function movePatchesThree(direction, row, obstacle, className, speed) {
+  //   let newObstacleArray = obstacle.map((index) => (index += row));
+  //   console.log(row);
+  //   patchesThreeInterval = setInterval(() => {
+  //     removeObject(newObstacleArray, className, row);
+  //     newObstacleArray = newObstacleArray.map((index) => {
+  //       if (index > row + width - 2 && direction === +1) {
+  //         return (index -= width - 1);
+  //       } else if (index < row + 1 && direction === -1) {
+  //         return (index += width - 1);
+  //       } else {
+  //         return (index += direction);
+  //       }
+  //     });
+  //     removeBoot();
+  //     addBoot(direction, row);
+  //     addObject(newObstacleArray, className, row);
+  //   }, speed);
+  // }
+
   function startGame() {
     startGameDiv.style.display = "none";
     grid.style.display = "flex";
@@ -206,22 +284,50 @@ function init() {
 
   startGameButton.addEventListener("click", startGame);
 
+  //  ***** LEVELS ******
+
   function levelZero() {
+    laneOneRow = width;
+    laneThreeRow = width * 3;
     // console.log("level zero activated, laneOneRow is " + laneOneRow);
-    moveFrisbeesOne(+1, frisbeeRow, obstacles.frisbees, "frisbee", 800);
-    moveLaneOne(-1, laneOneRow, obstacles.laneOne, "lane-one", 1000);
-    moveLaneTwo(+1, laneTwoRow, obstacles.laneTwo, "lane-two", 1000);
-    movePatchesOne(+1, bogRowOne, obstacles.greenOne, "green-patch", 1000);
-    movePatchesTwo(-1, bogRowTwo, obstacles.greenTwo, "green-patch", 1000);
+    // moveFrisbeesOne(+1, frisbeeRowOne, obstacles.frisbeesOne, "frisbee", 800);
+    // moveLaneOne(-1, laneOneRow, obstacles.laneOne, "lane-one", 1000);
+    // moveLaneThree(+1, laneThreeRow, obstacles.laneThree, "lane-two", 1000);
+    movePatchesOne(-1, bogRowOne, obstacles.greenOne, "green-patch", 1000);
+    movePatchesTwo(+1, bogRowTwo, obstacles.greenTwo, "green-patch", 1000);
+    // movePatchesThree(+1, bogRowThree, obstacles.greenThree, "green-patch", 800);
   }
 
   function levelOne() {
-    laneOneRow = width * 4;
+    laneOneRow = width;
+    laneTwoRow = width * 2;
+    laneThreeRow = "string";
     console.log("level one activated, laneOneRow is " + laneOneRow);
     // console.log("lane one in level one:" + laneOneRow);
-    // moveObstacles(+1, frisbeeRow, obstacles.frisbees, "frisbee", 700);
+    moveFrisbeesOne(+1, frisbeeRowOne, obstacles.frisbeesOne, "frisbee", 900);
+    moveFrisbeesTwo(-1, frisbeeRowTwo, obstacles.frisbeesTwo, "frisbee", 1000);
     moveLaneOne(-1, laneOneRow, obstacles.laneOne, "lane-one", 1000);
-    // moveObstacles(+1, laneTwoRow, obstacles.laneTwo, "lane-two", 400);
+    moveLaneTwo(+1, laneTwoRow, obstacles.laneTwo, "lane-two", 800);
+  }
+
+  function levelTwo() {
+    laneOneRow = width;
+    laneTwoRow = width * 2;
+    laneThreeRow = width * 3;
+    console.log("level one activated, laneOneRow is " + laneOneRow);
+    // console.log("lane one in level one:" + laneOneRow);
+    moveFrisbeesOne(+1, frisbeeRowOne, obstacles.frisbeesOne, "frisbee", 900);
+    moveFrisbeesTwo(-1, frisbeeRowTwo, obstacles.frisbeesTwo, "frisbee", 1000);
+    moveFrisbeesThree(
+      +1,
+      frisbeeRowThree,
+      obstacles.frisbeesThree,
+      "frisbee",
+      700
+    );
+    moveLaneOne(-1, laneOneRow, obstacles.laneOne, "lane-one", 1000);
+    moveLaneTwo(+1, laneTwoRow, obstacles.laneTwo, "lane-two", 800);
+    moveLaneThree(-1, laneThreeRow, obstacles.laneThree, "lane-one", 800);
   }
 
   function replay() {
@@ -233,9 +339,21 @@ function init() {
     grid.style.display = "flex";
     levelDisplay.style.display = "flex";
 
-    // if (level === 1){
-    //   levelOne()
-    // }
+    const obstacleClassNames = ["frisbee", "lane-one", "lane-two"];
+    obstacleClassNames.forEach((obstacle) => {
+      for (let index = 0; index < gridCellCount; index++) {
+        const element = cells[index];
+        element.classList.remove(obstacle);
+      }
+    });
+
+    if (level === 1) {
+      levelOne();
+    } else if (level === 2) {
+      levelTwo();
+    } else if (level === 3) {
+      gameBeat();
+    }
   }
 
   playAgainButton.forEach((button) => button.addEventListener("click", replay));
@@ -245,7 +363,6 @@ function init() {
     cells[bootPosition].classList.remove("boot");
     const x = bootPosition % width;
     const y = Math.floor(bootPosition / width);
-    // console.log(x, y);
 
     switch (event.keyCode) {
       case 39:
@@ -286,13 +403,18 @@ function init() {
     endGameDiv.style.display = "flex";
   }
 
+  function gameBeat() {
+    grid.style.display = "none";
+    gameBeatDiv.style.display = "flex";
+  }
+
   function roadDesign() {
     for (let i = 0; i < gridCellCount; i++) {
       if (
         (i >= laneOneRow && i <= laneOneRow + width - 1) ||
-        (i >= laneTwoRow && i <= laneTwoRow + width - 1)
+        (i >= laneTwoRow && i <= laneTwoRow + width - 1) ||
+        (i >= laneThreeRow && i <= laneThreeRow + width - 1)
       ) {
-        // console.log("it works!");
         cells[i].classList.add("road");
       } else {
         cells[i].classList.remove("road");
@@ -309,23 +431,21 @@ function init() {
   function checkGameWon() {
     if (bootPosition < width - 1) {
       // console.log("it works!");
-      // grid.style.display = "none";
-      // gameWonDiv.style.display = "flex";
-      // levelDisplay.style.display = "none";
+      grid.style.display = "none";
+      gameWonDiv.style.display = "flex";
+      levelDisplay.style.display = "none";
       level += 1;
       levelDisplay.innerHTML = `Level: ${level}`;
-      // clearInterval(laneOneInterval);
-      // clearInterval(laneTwoInterval);
-      // clearInterval(frisbeesOneInterval);
-      // clearInterval(patchesOneInterval);
-      // clearInterval(patchesOneInterval);
-      // clearInterval(patchesTwoInterval);
       [
         laneOneInterval,
         laneTwoInterval,
+        laneThreeInterval,
         frisbeesOneInterval,
+        frisbeesTwoInterval,
+        frisbeesThreeInterval,
         patchesOneInterval,
         patchesTwoInterval,
+        patchesThreeInterval,
       ].forEach((i) => clearInterval(i));
     }
   }
