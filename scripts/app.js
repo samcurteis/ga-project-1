@@ -1,7 +1,7 @@
 import moveObstacles from "./obstacles.js";
 
 function init() {
-  // moveObstacles();
+  moveObstacles();
 
   let laneOneInterval;
   let laneTwoInterval;
@@ -70,6 +70,7 @@ function init() {
 
     frisbeesOneInterval = setInterval(() => {
       // console.log(newObstacleArray);
+      addBoot(direction);
       removeObject(newObstacleArray, className, row);
       newObstacleArray = newObstacleArray.map((index) => {
         if (index > row + width - 2 && direction === +1) {
@@ -92,7 +93,7 @@ function init() {
 
     patchesOneInterval = setInterval(() => {
       // console.log(newObstacleArray);
-      removeBoot(newObstacleArray);
+      removeBoot();
       removeObject(newObstacleArray, className, row);
       newObstacleArray = newObstacleArray.map((index) => {
         if (index > row + width - 2 && direction === +1) {
@@ -104,8 +105,9 @@ function init() {
         }
       });
       // console.log(newObstacleArray);
-      addObject(newObstacleArray, className, row);
       addBoot(direction);
+      addObject(newObstacleArray, className, row);
+
       checkCollision();
     }, speed);
     roadDesign();
@@ -116,17 +118,18 @@ function init() {
 
     patchesTwoInterval = setInterval(() => {
       // console.log(newObstacleArray);
-      removeBoot(newObstacleArray);
+      // removeBoot(newObstacleArray);
+      removeBoot();
       removeObject(newObstacleArray, className, row);
-      newObstacleArray = newObstacleArray.map((index) => {
-        if (index > row + width - 2 && direction === +1) {
-          return (index -= width - 1);
-        } else if (index < row + 1 && direction === -1) {
-          return (index += width - 1);
-        } else {
-          return (index += direction);
-        }
-      });
+      // newObstacleArray = newObstacleArray.map((index) => {
+      //   if (index > row + width - 2 && direction === +1) {
+      //     return (index -= width - 1);
+      //   } else if (index < row + 1 && direction === -1) {
+      //     return (index += width - 1);
+      //   } else {
+      //     return (index += direction);
+      //   }
+      // });
       // console.log(newObstacleArray);
       addObject(newObstacleArray, className, row);
       addBoot(direction);
@@ -137,19 +140,23 @@ function init() {
 
   function addBoot(direction) {
     if (cells[bootPosition].classList.contains("green-patch")) {
-      console;
       bootPosition += direction;
       cells[bootPosition].classList.add("boot");
     }
   }
 
-  function removeBoot(obstacle) {
-    obstacle.forEach((index) => {
-      if (cells[index].classList.contains("boot")) {
-        cells[index].classList.remove("boot");
-      }
-    });
+  function removeBoot() {
+    if (cells[bootPosition].classList.contains("green-patch"))
+      cells[bootPosition].classList.remove("boot");
   }
+
+  // function removeBoot(obstacle) {
+  //   obstacle.forEach((index) => {
+  //     if (cells[index].classList.contains("boot")) {
+  //       cells[index].classList.remove("boot");
+  //     }
+  //   });
+  // }
 
   const grid = document.querySelector(".grid");
   const startGameDiv = document.querySelector(".start-game");
