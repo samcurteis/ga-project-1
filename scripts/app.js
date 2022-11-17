@@ -1,5 +1,8 @@
-// import moveObstacles from "./obstacles";
+import moveObstacles from "./obstacles.js";
+
 function init() {
+  // moveObstacles();
+
   let laneOneInterval;
   let laneTwoInterval;
   let frisbeesOneInterval;
@@ -88,10 +91,9 @@ function init() {
     let newObstacleArray = obstacle.map((index) => (index += row));
 
     patchesOneInterval = setInterval(() => {
-      console.log(bootPosition);
       // console.log(newObstacleArray);
-      removeObject(newObstacleArray, className, row);
       removeBoot(newObstacleArray);
+      removeObject(newObstacleArray, className, row);
       newObstacleArray = newObstacleArray.map((index) => {
         if (index > row + width - 2 && direction === +1) {
           return (index -= width - 1);
@@ -103,9 +105,42 @@ function init() {
       });
       // console.log(newObstacleArray);
       addObject(newObstacleArray, className, row);
+      addBoot(direction);
       checkCollision();
     }, speed);
     roadDesign();
+  }
+
+  function movePatchesTwo(direction, row, obstacle, className, speed) {
+    let newObstacleArray = obstacle.map((index) => (index += row));
+
+    patchesTwoInterval = setInterval(() => {
+      // console.log(newObstacleArray);
+      removeBoot(newObstacleArray);
+      removeObject(newObstacleArray, className, row);
+      newObstacleArray = newObstacleArray.map((index) => {
+        if (index > row + width - 2 && direction === +1) {
+          return (index -= width - 1);
+        } else if (index < row + 1 && direction === -1) {
+          return (index += width - 1);
+        } else {
+          return (index += direction);
+        }
+      });
+      // console.log(newObstacleArray);
+      addObject(newObstacleArray, className, row);
+      addBoot(direction);
+      checkCollision();
+    }, speed);
+    roadDesign();
+  }
+
+  function addBoot(direction) {
+    if (cells[bootPosition].classList.contains("green-patch")) {
+      console;
+      bootPosition += direction;
+      cells[bootPosition].classList.add("boot");
+    }
   }
 
   function removeBoot(obstacle) {
@@ -115,42 +150,6 @@ function init() {
       }
     });
   }
-
-  function addBoot(obstacle, direction) {
-    if (cells[bootPosition].classList.contains("green-patch")) {
-      bootPosition += direction;
-      cells[bootPosition].classList.add("boot");
-    }
-  }
-
-  function movePatchesTwo(direction, row, obstacle, className, speed) {
-    let newObstacleArray = obstacle.map((index) => (index += row));
-
-    patchesTwoInterval = setInterval(() => {
-      // console.log(newObstacleArray);
-      removeObject(newObstacleArray, className, row);
-      newObstacleArray = newObstacleArray.map((index) => {
-        if (index > row + width - 2 && direction === +1) {
-          return (index -= width - 1);
-        } else if (index < row + 1 && direction === -1) {
-          return (index += width - 1);
-        } else {
-          return (index += direction);
-        }
-      });
-      // console.log(newObstacleArray);
-      addObject(newObstacleArray, className, row);
-      checkCollision();
-    }, speed);
-    roadDesign();
-  }
-
-  const obstacleIntervals = [
-    laneOneInterval,
-    laneTwoInterval,
-    frisbeesOneInterval,
-    patchesOneInterval,
-  ];
 
   const grid = document.querySelector(".grid");
   const startGameDiv = document.querySelector(".start-game");
@@ -308,11 +307,19 @@ function init() {
       // levelDisplay.style.display = "none";
       level += 1;
       levelDisplay.innerHTML = `Level: ${level}`;
-      clearInterval(laneOneInterval);
-      clearInterval(laneTwoInterval);
-      clearInterval(frisbeesOneInterval);
-      clearInterval(patchesOneInterval);
-      clearInterval(patchesTwoInterval);
+      // clearInterval(laneOneInterval);
+      // clearInterval(laneTwoInterval);
+      // clearInterval(frisbeesOneInterval);
+      // clearInterval(patchesOneInterval);
+      // clearInterval(patchesOneInterval);
+      // clearInterval(patchesTwoInterval);
+      [
+        laneOneInterval,
+        laneTwoInterval,
+        frisbeesOneInterval,
+        patchesOneInterval,
+        patchesTwoInterval,
+      ].forEach((i) => clearInterval(i));
     }
   }
 }
