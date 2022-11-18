@@ -5,6 +5,7 @@ function init() {
   const gameWonDiv = document.querySelector(".game-won");
   const gameBeatDiv = document.querySelector(".game-beat");
   const playAgainButton = document.querySelectorAll(".play-again");
+  const restartButton = document.querySelectorAll(".restart");
   const startGameButton = document.querySelector(".play");
   const levelDisplay = document.querySelector(".level");
 
@@ -54,6 +55,7 @@ function init() {
       cells.push(cell);
       grid.appendChild(cell);
     }
+    checkGameWon();
     cells[startingPosition].classList.add("boot");
   }
 
@@ -107,7 +109,6 @@ function init() {
       });
       addObject(newObstacleArray, className, row);
       checkCollision();
-      checkGameWon();
     }, speed);
     roadDesign();
   }
@@ -334,16 +335,15 @@ function init() {
   }
 
   function replay() {
-    cells[bootPosition].classList.remove("boot");
-    bootPosition = Math.floor(width * width - width / 2);
-    cells[bootPosition].classList.add("boot");
     gameWonDiv.style.display = "none";
     endGameDiv.style.display = "none";
     gameBeatDiv.style.display = "none";
     grid.style.display = "flex";
-    levelDisplay.style.display = "flex";
+    // levelDisplay.style.display = "flex";
     clearDesigns();
     clearIntervals();
+    resetBoot();
+    levelDisplay.innerHTML = `<h2>Level: ${level}</h2>`;
     isGameBeat = false;
 
     if (level === 0) {
@@ -356,6 +356,13 @@ function init() {
   }
 
   playAgainButton.forEach((button) => button.addEventListener("click", replay));
+
+  function restart() {
+    levelDisplay.innerHTML = `<h2>Level: ${level}</h2>`;
+    replay();
+  }
+
+  restartButton.forEach((button) => button.addEventListener("click", restart));
 
   function moveBoot(event) {
     cells[bootPosition].classList.remove("road-boot");
@@ -390,9 +397,9 @@ function init() {
     const obstacleClassNames = ["frisbee", "lane-one", "lane-two"];
     obstacleClassNames.forEach((obstacle) => {
       if (cells[bootPosition].classList.contains(obstacle)) {
-        // endGame();
-        // clearIntervals();
-        // clearDesigns;
+        endGame();
+        clearIntervals();
+        clearDesigns;
       }
     });
   }
@@ -403,7 +410,7 @@ function init() {
     endGameDiv.style.display = "flex";
     clearDesigns();
     level = 0;
-    levelDisplay.innerHTML = level;
+
     console.log("value of level at end game" + level);
   }
 
@@ -411,28 +418,38 @@ function init() {
     grid.style.display = "none";
     gameWonDiv.style.display = "none";
     gameBeatDiv.style.display = "flex";
-    levelDisplay.style.display = "none";
+    // levelDisplay.style.display = "none";
     clearDesigns();
     isGameBeat = true;
     level = 0;
-    level.innerText = level;
+    // level.innerText = level;
     console.log(level);
   }
 
   function checkGameWon() {
-    if (bootPosition < width - 1 && level === 2) {
-      level = level * 0;
-      levelDisplay.innerHTML = `Level: ${level}`;
-      gameBeat();
-    } else if (bootPosition < width - 1 && isGameBeat === false) {
-      grid.style.display = "none";
-      gameWonDiv.style.display = "flex";
-      levelDisplay.style.display = "none";
-      level += 1;
-      levelDisplay.innerHTML = `Level: ${level}`;
-      clearIntervals();
-      clearDesigns();
-    }
+    setInterval(() => {
+      if (bootPosition < width - 1 && level === 2) {
+        // level = level * 0;
+        // levelDisplay.innerText = `Level: ${level}`;
+        gameBeat();
+        resetBoot();
+      } else if (bootPosition < width - 1 && isGameBeat === false) {
+        resetBoot();
+        grid.style.display = "none";
+        gameWonDiv.style.display = "flex";
+        // levelDisplay.style.display = "none";
+        level += 1;
+        levelDisplay.innerHTML = `<h2>Level: ${level}</h2>`;
+        clearIntervals();
+        clearDesigns();
+      }
+    }, 400);
+  }
+
+  function resetBoot() {
+    cells[bootPosition].classList.remove("boot");
+    bootPosition = Math.floor(width * width - width / 2);
+    cells[bootPosition].classList.add("boot");
   }
 
   function roadDesign() {
