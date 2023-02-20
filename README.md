@@ -30,7 +30,7 @@ Our brief for this project was to make a web browser game using HTML, CSS and Ja
 
 ## Planning
 
-The first step I took for this project was to create a wireframe of Excalidraw that also included some pseudocode.
+The first step I took for this project was to create a wireframe on Excalidraw that also included some pseudocode.
 
 <p align='center'>
 <img src='images/p1-wireframe.png' alt='Project 1 wireframe' width='600' align='center'>
