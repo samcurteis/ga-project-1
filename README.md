@@ -90,7 +90,7 @@ This was important as a smaller grid meant the objects could be seen more easily
 
 ### The Player
 
-To move the player I used a switch statement which removes the image of the boots from a div and changes the variable ‘bootPosition’ by either 1, or the width of the grid, depending on whether the player wants to move forward, backwards, left or right. Some if statements within the switch statement also ensure that if the boots are on the edge of the grid it doesn’t teleport to the other side, or off the grid completely. The x and y variables calculate if the bootPosition is at the end of a line, or the first/ last line in the grid. Using the width variable to control this means that the switch statement does not need to be changed if the size of the grid is modified.
+To move the player I used a switch statement which removes the image of the boots from a div and changes the variable ‘bootPosition’ by either 1, or the width of the grid, depending on whether the player wants to move forward, backwards, left or right. Some if statements within the switch statement also ensure that if the boots are on the edge of the grid it doesn’t teleport to the other side, or off the grid completely. The x and y variables calculate if the `bootPosition` is at the end of a line, or the first/ last line in the grid. Using the width variable to control this means that the switch statement does not need to be changed if the size of the grid is modified.
 
 ```
   function moveBoot(event) {
@@ -267,7 +267,7 @@ function replay() {
     }
 ```
 
-As an extra challenge, I wanted to create a river with logs, with a reversed version of checkCollision, in which the player would only survive if they were on the moving obstacle, and would move as the obstacle moved. Unfortunately, I did not have enough time to complete this function before the deadline, but came pretty close, so the code is still there for me to return to at some point to complete.
+As an extra challenge, I wanted to create a river with logs, with a reversed version of `checkCollision`, in which the player would only survive if they were on the moving obstacle, and would move as the obstacle moved. Unfortunately, I did not have enough time to complete this function before the deadline, but came pretty close, so the code is still there for me to return to at some point to complete.
 
 ## Challenges
 
