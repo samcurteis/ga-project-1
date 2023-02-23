@@ -8,7 +8,7 @@
     - [Technologies Used](#technologies-used)
     - [Brief](#brief)
 * [Planning](#planning)
-* [Building the App](#building-the-app)
+* [Build Process](#build-process)
     - [The Grid](#the-grid)
     - [The Player](#the-player)
     - [The Obstacles](#the-obstacles)
@@ -28,7 +28,7 @@ This was the first project assignment that I was given on the Software Engineeri
 
 https://samcurteis.github.io/ga-project-1
 
-### Code installation
+### Code Installation
 
 Firstly download the code onto your local machine. After you have done that there are various ways you can run this project locally.
 
@@ -40,7 +40,7 @@ Alternatively, you can open the project in your file browser and double-click on
 
 This was a solo project, and we were given a week to complete it.
 
-### Technologies used
+### Technologies Used
 
 The project was built exclusively using HTML, CSS and JavaScript.
 
@@ -60,7 +60,7 @@ I had a lot of ideas for features that I wanted to implement into the game, so I
 
 In looking at the projects of previous students who had also done frogger, I was impressed by some of the features and styles implemented, but I found with a lot of them that playing the actual game didn’t feel quite right. I decided then that for my project I wanted to prioritise making sure the gameplay worked, and this meant making key aspects of the game easily modifiable so that once all aspects of the game were implemented I could easily tweak them to improve how the game played.
 
-## Building the app
+## Build Process
 
 ### The Grid
 
@@ -292,5 +292,5 @@ I am also quite happy that I was able to include the design of the game within i
 ## Bugs
 If the player hits an obstacle and loses the game, they are still on the grid and able to move around. If the player continues moving forward they are therefore still able to reach the finish and win the level. This would be a fairly easy problem to fix by simply removing the player when they lose the game, which I have done in a separate version of the code. I have left the game as it was when I completed it however so you can see everything I did within the week I was set to finish the project.
 
-## Future improvements
+## Future Improvements
 Having just finished learning JavaScript, finding it much more challenging than CSS, and feeling eager to get to grips with it, I really wanted to focus on the functionality of the game. The downside to focussing on the functionality of the game however meant that I did not put much effort into the styling. Overall I think it’s a pretty ugly game, and the theme is probably pretty confusing outside of my group of friends, so if I came back I would definitely look at touching this up some more. I think there’s still a lot for me to learn about CSS so this would be a great challenge. I also really want to get the river/ log obstacles working.
