@@ -15,7 +15,7 @@
     - [Levels, Winning/Losing and Grid Design](#levels-winninglosing-and-grid-design)
 * [Challenges](#challenges)
 * [Wins](#wins)
-* [Key Takeaways](#key-takeaways)
+* [Key Learnings](#key-learnings)
 * [Bugs](#bugs)
 * [Future Improvements](#future-improvements)
 
@@ -283,7 +283,7 @@ Overall I’m happy with this project in that my main goal was to create a modul
 
 I am also quite happy that I was able to include the design of the game within its modular nature, in that the background of the road is not manually placed but placed depending on where the cars are placed on each level. There are definitely aspects of the code which I feel like I could have done better, but given the fact that I created this game only three weeks into my coding journey, I am happy with what I was able to achieve.
 
-## Key Takeaways
+## Key Learnings
 
 - This project was really helpful in getting me to grips with the fundamentals of JavaScript, as well as working independently in figuring out how things work, and how to fix them when they go wrong.
 -  It set me up with a boosted confidence in my abilities and got me excited for the next challenge.
