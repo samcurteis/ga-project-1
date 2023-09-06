@@ -56,7 +56,7 @@ The first step I took for this project was to create a wireframe on Excalidraw t
 <img src='images/p1-wireframe.png' alt='Project 1 wireframe' width='600' align='center'>
 </p>
 
-I had a lot of ideas for features that I wanted to implement into the game, so I set out on prioritising the order in which I would go through them, starting with my MVP and ending with features that I felt were less important or central to the game. I also began to think through some of the problems that I might come across when building the project, such as how to calculate the location of objects, space them, and end the game when they came into collision with the player. 
+I had a lot of ideas for features that I wanted to implement into the game, so I set out on prioritising the order in which I would go through them, starting with my MVP (Minimum Viable Product) and ending with features that I felt were less important or central to the game. I also began to think through some of the problems that I might come across when building the project, such as how to calculate the location of objects, space them, and end the game when they came into collision with the player. 
 
 In looking at the projects of previous students who had also done frogger, I was impressed by some of the features and styles implemented, but I found with a lot of them that playing the actual game didn’t feel quite right. I decided then that for my project I wanted to prioritise making sure the gameplay worked, and this meant making key aspects of the game easily modifiable so that once all aspects of the game were implemented I could easily tweak them to improve how the game played.
 
@@ -64,9 +64,9 @@ In looking at the projects of previous students who had also done frogger, I was
 
 ### The Grid
 
-The first step of my project was to implement a grid on which the player and obstacles could move, as well as create the player itself. As we had already created such a grid previously this was a fairly straightforward process. The grid was created using a for loop which created a series of divs equal to the value of a variable titled gridCellCount, which was the value of another variable titled ‘width’, multiplied by itself. This meant that as I proceeded with the project I could scale the grid either up or down.
+The first step of my project was to implement a grid on which the player and obstacles could move, as well as create the player itself. As we had already created such a grid previously this was a fairly straightforward process. The grid was created using a for-loop which created a series of `div`s equal to the value of a variable titled `gridCellCount`, which was the value of another variable titled `width`, multiplied by itself. This meant that as I proceeded with the project I could easily scale the size of the grid either up or down.
 
-```
+```*.js
 const width = 11;
 const gridCellCount = width * width
 
@@ -81,18 +81,17 @@ function createGrid(startingPosition) {
          checkGameWon();
          cells[startingPosition].classList.add('boot');
       }
-   
 ```
 
-As I mentioned in the planning section, I was eager to make the game easily modifiable. I was able to achieve this by setting the size of the grid using one value, which is then multiplied by itself. This variable, ‘width’, was then used throughout the project to determine the position of all objects within it, meaning that if I resized the grid, I did not have to manually adjust the position of any of the obstacles. 
+As I mentioned in the planning section, I was eager to make the game easily modifiable. I was able to achieve this by setting the size of the grid using one value, which is then multiplied by itself. This variable, `width`, was then used throughout the project to determine the position of all objects within it, meaning that if I resized the grid, I did not have to manually adjust the position of any of the obstacles. 
 
 This was important as a smaller grid meant the objects could be seen more easily, whereas a larger grid meant more space to play and more predictable movement of objects, and I wanted to make sure I could easily find a sweet spot between the two.
 
 ### The Player
 
-To move the player I used a switch statement which removes the image of the boots from a div and changes the variable ‘bootPosition’ by either 1, or the width of the grid, depending on whether the player wants to move forward, backwards, left or right. Some if statements within the switch statement also ensure that if the boots are on the edge of the grid it doesn’t teleport to the other side, or off the grid completely. The x and y variables calculate if the `bootPosition` is at the end of a line, or the first/ last line in the grid. Using the width variable to control this means that the switch statement does not need to be changed if the size of the grid is modified.
+To move the player I used a switch statement which removes the image of the boots from a `div` and changes the variable `bootPosition` by either 1, or the width of the grid, depending on whether the player wants to move forward, backwards, left or right. Some if-statements within the switch statement also ensure that if the boots are on the edge of the grid it doesn’t teleport to the other side, or off the grid completely. The x and y variables calculate if the `bootPosition` is at the end of a line, or the first/ last line in the grid. Using the width variable to control this means that the switch statement does not need to be changed if the size of the grid is modified.
 
-```
+```*.js
   function moveBoot(event) {
          cells[bootPosition].classList.remove('road-boot');
          cells[bootPosition].classList.remove('boot');
@@ -133,7 +132,7 @@ There were various functions and variables which went into creating and moving t
  #### obstacles
 
  Determines the starting position in the index of each obstacle.
-  ```
+  ```*.js
  const obstacles = {
        laneOne: [0, 1, 2, 6, 7, 8],
        laneTwo: [0, 5, 10],
@@ -148,7 +147,7 @@ There were various functions and variables which went into creating and moving t
 
  Creates an interval which removes the obstacle from its previous position on the grid, adjusts its index by one and then places it back in the grid at that new position.
 
- ```
+ ```*.js
     function moveFrisbeesOne(direction, row, obstacle, className, speed) {
       let newObstacleArray = obstacle.map((index) => (index += row));
    
@@ -175,7 +174,7 @@ There were various functions and variables which went into creating and moving t
 
  Sets the row in which the obstacles will appear in a given level of the game, and calls the function for each obstacle, containing the 5 variables for each obstacle. These 5 variables determined the direction the obstacle moved in, the row, the type of object, the class name for that object, and the speed the object would travel in.
 
-```    
+```*.js
      function levelZero() {
       frisbeeRowOne = width * 7;
       laneOneRow = width;
@@ -199,7 +198,7 @@ The final step was to add functionality for winning or losing the game, moving u
 #### roadDesign
 This function takes the variables I use to determine in which row the car obstacles will move. Using a for loop it runs through the grid and adds an image of a road to those rows, and removes it from any rows where the cars are not moving.
 
-```
+```*.js
 function roadDesign() {
        for (let i = 0; i < gridCellCount; i++) {
          if (
@@ -217,7 +216,7 @@ function roadDesign() {
 
 #### bootRoadDesign
 When the player is on the road, the image of the player is replaced by the same image but with the road as its background.
-```
+```*.js
 function bootRoadDesign() {
        if (cells[bootPosition].classList.contains('road')) {
          cells[bootPosition].classList.add('road-boot');
@@ -228,7 +227,7 @@ function bootRoadDesign() {
 #### clearDesigns
 This function erases all designs so that they can be replaced according to the design of the next level.
 
-```
+```*.js
 function clearDesigns() {
        const obstacleClassNames = ['frisbee', 'lane-one', 'lane-two', 'road'];
        obstacleClassNames.forEach((obstacle) => {
@@ -244,7 +243,7 @@ function clearDesigns() {
 #### replay
 Redisplays the grid and hides whichever screen the player was on before (if they lose, move to the next level or win the game). It then removes all of the obstacles that were on the grid, clears all intervals, moves the player to the starting position and begins whichever level the player is to play next.
 
-```
+```*.js
 function replay() {
        gameWonDiv.style.display = 'none';
        endGameDiv.style.display = 'none';
